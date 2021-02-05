@@ -1,18 +1,18 @@
-const express = require('express')
-const cors = require('cors')
-const bodyparser = require('body-parser')
+const express = require("express");
+const app = express();
+const cors = require("cors");
+const bodyParser = require("body-parser");
+const {userRouter} = require('./router');
+const port = 2000;
 
-// main app
-const app = express()
+app.use(bodyParser());
+app.use(cors());
+app.use(express.static('public'));
 
-// apply middleware
-app.use(cors())
-app.use(bodyparser.json())
+app.get('/', (req, res) => {
+    res.status(200).send('<h1>Express API</h1>');
+});
 
-// main route
-const response = (req, res) => res.status(200).send('<h1>REST API JCWM-15</h1>')
-app.get('/', response)
+app.use('/users', userRouter);
 
-// bind to local machine
-const PORT = process.env.PORT || 2000
-app.listen(PORT, () => `CONNECTED : port ${PORT}`)
+app.listen(port, () => console.log(`API active at port ${port}`));
